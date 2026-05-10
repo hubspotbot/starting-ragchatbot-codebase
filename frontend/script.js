@@ -5,7 +5,7 @@ const API_URL = '/api';
 let currentSessionId = null;
 
 // DOM elements
-let chatMessages, chatInput, sendButton, totalCourses, courseTitles;
+let chatMessages, chatInput, sendButton, totalCourses, courseTitles, newChatBtn;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
@@ -15,7 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     sendButton = document.getElementById('sendButton');
     totalCourses = document.getElementById('totalCourses');
     courseTitles = document.getElementById('courseTitles');
-    
+    newChatBtn = document.getElementById('newChatBtn');
+
     setupEventListeners();
     createNewSession();
     loadCourseStats();
@@ -28,8 +29,19 @@ function setupEventListeners() {
     chatInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') sendMessage();
     });
-    
-    
+
+    // New chat button
+    newChatBtn.addEventListener('click', async () => {
+        if (currentSessionId) {
+            try {
+                await fetch(`${API_URL}/session/${currentSessionId}`, { method: 'DELETE' });
+            } catch (e) {
+                // Best-effort cleanup; frontend resets regardless
+            }
+        }
+        createNewSession();
+    });
+
     // Suggested questions
     document.querySelectorAll('.suggested-item').forEach(button => {
         button.addEventListener('click', (e) => {
@@ -122,10 +134,16 @@ function addMessage(content, type, sources = null, isWelcome = false) {
     let html = `<div class="message-content">${displayContent}</div>`;
     
     if (sources && sources.length > 0) {
+        const sourceLinks = sources.map(s => {
+            if (s.url) {
+                return `<a class="source-chip" href="${s.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(s.label)}</a>`;
+            }
+            return `<span class="source-chip">${escapeHtml(s.label)}</span>`;
+        }).join('');
         html += `
             <details class="sources-collapsible">
                 <summary class="sources-header">Sources</summary>
-                <div class="sources-content">${sources.join(', ')}</div>
+                <div class="sources-content">${sourceLinks}</div>
             </details>
         `;
     }

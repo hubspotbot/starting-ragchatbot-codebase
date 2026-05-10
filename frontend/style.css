@@ -241,8 +241,30 @@ header h1 {
 }
 
 .sources-content {
-    padding: 0 0.5rem 0.25rem 1.5rem;
-    color: var(--text-secondary);
+    padding: 0.25rem 0.5rem 0.25rem 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.source-chip {
+    display: inline-block;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #a8c7fa;
+    font-size: 0.7rem;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.15s, border-color 0.15s;
+}
+
+a.source-chip:hover {
+    background: rgba(168, 199, 250, 0.15);
+    border-color: rgba(168, 199, 250, 0.4);
+    color: #c8dcfc;
+    text-decoration: none;
 }
 
 /* Markdown formatting styles */
@@ -715,4 +737,27 @@ details[open] .suggested-header::before {
     .sidebar {
         width: 280px;
     }
+}
+
+/* New Chat Button */
+.new-chat-btn {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0.5rem 0 1rem;
+    width: 100%;
+    text-align: left;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.new-chat-btn:hover,
+.new-chat-btn:focus {
+    outline: none;
+    color: var(--primary-color);
 }
